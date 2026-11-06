@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#F7F4EC" />
+    <title>点到 CALME · 课堂随机点名系统</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script>
+      // 启动失败时把原因显示在页面上，避免只看到白屏
+      (function () {
+        function report(message) {
+          var el = document.getElementById('boot-error');
+          if (!el) {
+            el = document.createElement('pre');
+            el.id = 'boot-error';
+            el.style.cssText =
+              'margin:40px auto;max-width:900px;padding:20px;border:1px solid #e3bdb5;border-radius:12px;' +
+              'background:#fdf3f1;color:#a8433a;font:13px/1.7 ui-monospace,Consolas,monospace;white-space:pre-wrap';
+            document.body.appendChild(el);
+          }
+          el.textContent = '页面启动失败：\n' + message;
+        }
+        window.addEventListener('error', function (event) {
+          if (event.target && event.target.tagName === 'SCRIPT') {
+            report('脚本加载失败 ' + (event.target.src || ''));
+            return;
+          }
+          report((event.message || '未知错误') + '\n' + (event.filename || '') + ':' + (event.lineno || ''));
+        });
+        window.addEventListener('unhandledrejection', function (event) {
+          report('Promise 未处理：' + (event.reason && event.reason.message ? event.reason.message : event.reason));
+        });
+      })();
+    </script>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: callme
+    runtime: node
+    plan: free
+    region: singapore
+    buildCommand: cd frontend && npm install --no-audit --no-fund && npm run build && cd ../backend && npm install --no-audit --no-fund
+    startCommand: cd backend && node src/server.js
+    healthCheckPath: /api/health
+    envVars:
+      # 在 Render 控制台里填，不要写进仓库
+      - key: DATABASE_URL
+        sync: false
+      - key: DB_POOL_SIZE
+        value: "5"
+      # node:sqlite 需要 22.5+，线上走 MySQL 也统一用 22
+      - key: NODE_VERSION
+        value: "22.16.0"
